@@ -1,0 +1,11 @@
+
+en:
+  admin:
+    actions:
+      guest_list:
+        title: "Guest List"
+        menu: "Guest List for %{model_label} '%{object_label}'"
+        breadcrumb: "Guest List"
+        link: "Guest List"
+        bulk_link: "Guest List selected %{model_label_plural}"
+        done: "Guest Listed"
