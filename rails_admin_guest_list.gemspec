@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = RailsAdminGuestList::VERSION
   s.authors     = ["Birgir Hrafn Sigurðsson"]
   s.email       = ["birgir@transmit.is"]
-  s.homepage    = "transmit.is"
+  s.homepage    = "http://www.transmit.is"
   s.summary     = "RailsAdmin gem to display guestlists"
   s.description = "RailsAdmin gem to display guestlist"
 
