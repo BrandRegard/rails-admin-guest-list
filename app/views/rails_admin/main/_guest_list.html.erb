@@ -1,0 +1,41 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th >Name</th>
+      <th >Type</th>
+      <th >Date</th>
+      <th >Tickets Remaining</th>
+      <th >Tickets Sold</th>
+      <th >Tickets Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% Event.where([" starttime > ? ", -1.day.since(Time.now)]).each do |event|%>
+    <% booked_tickets = event.bookings.where(["ref IS NOT ?",nil]).map(&:tickets).flatten.count %>
+    <tr class="odd link" data-link="/super/booking">
+      <td>
+        <span class="show">
+          <a href="/super/guest_list?id=<%=event.id%>"><%=event.title%></a>
+        </span>
+      </td>
+      <td>
+        <span class="show">
+          <a href="/super/event_type/<%=event.event_type.id%>"><%=event.event_type.name%></a>
+        </span>
+      </td>
+      <td>
+        <%= event.starttime.strftime '%Y-%m-%d %H:%M:%S'%>
+      </td>
+      <td>
+        <%= event.place - booked_tickets  %>
+      </td>
+      <td>
+        <%= booked_tickets %>
+      </td>
+      <td>
+        <%= event.place %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

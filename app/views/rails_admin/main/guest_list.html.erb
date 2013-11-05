@@ -1,0 +1,5 @@
+<% if params[:id] %>
+  <%= render :partial => "single_guest_list",:locals=>{:event=>Event.find(params[:id])}%>
+<% else %>
+  <%= render :partial => "guest_list"%>
+<% end %>

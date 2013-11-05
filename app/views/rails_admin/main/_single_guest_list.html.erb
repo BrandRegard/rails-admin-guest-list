@@ -1,0 +1,71 @@
+<a href="/super/guest_list">Go back</a>
+<%bookings = event.bookings.where(["ref IS NOT ?",nil]) %>
+<section>
+  <h3>
+    <%= event.title %>
+  </h3>
+
+  <div>
+    <table>
+      <tr>
+        <td><strong>Type</strong></td>
+        <td><strong>:</strong></td>
+        <td><%= event.event_type.name %></td>
+      </tr>
+      <tr>
+        <td><strong>Date</strong></td>
+        <td><strong>:</strong></td>
+        <td><%= event.starttime.strftime '%Y-%m-%d %H:%M:%S' %></td>
+      </tr>
+      <tr>
+        <td><strong>Tickets Total<strong></td>
+        <td><strong>:</strong></td>
+        <td><%= event.place %></td>
+      </tr>
+      <tr>
+        <td><strong>Tickets sold<strong></td>
+        <td><strong>:</strong></td>
+        <td><%= bookings.map(&:tickets).flatten.count %></td>
+      </tr>
+    </table>
+  </div>
+
+  <legend>Bookings</legend>
+
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th >Reference</th>
+        <th >Name</th>
+        <th >Nr. Tickets</th>
+        <th >Address</th>
+        <th >Transaction Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% bookings.each do |booking|%>
+      <tr class="odd link" data-link="/super/booking">
+        <td>
+          <span class="show">
+            <a href="/super/booking/<%=booking.id%>"><%=booking.ref%></a>
+          </span>
+        </td>
+        <td>
+          <span class="show">
+            <a href="/super/user/<%=booking.user.id%>"><%=booking.user.name%></a>
+          </span>
+        </td>
+        <td>
+          <%= booking.tickets.count %>
+        </td>
+        <td>
+          <%= booking.user.address %>
+        </td>
+        <td>
+          <%= booking.created_at.strftime '%Y-%m-%d %H:%M:%S' %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
