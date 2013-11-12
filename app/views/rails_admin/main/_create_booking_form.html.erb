@@ -59,6 +59,11 @@
         td = $('<td>').append(resp.transaction_date)
         tr.append(td)
 
+        td = '<td class="last links"><ul class="inline">'
+           + "<li title=\"Show\" rel=\"tooltip\" class=\"icon show_member_link \"><a href=\"/super/booking/"+resp.results.booking.id+"\"><i class=\"icon-info-sign\"></i><span style=\"display:none\">Show</span></a></li><li title=\"Delete\" rel=\"tooltip\" class=\"icon delete_member_link \">"
+           + "<a href=\"/super/booking/"+resp.results.booking.id+"/delete\"><i class=\"icon-remove\"></i><span style=\"display:none\">Delete</span></a></li></ul></td>"
+        tr.append(td)
+
         $(".table").prepend(tr)
 
         $('#create_booking form').hide('slow')

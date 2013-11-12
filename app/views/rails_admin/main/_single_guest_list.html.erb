@@ -48,6 +48,7 @@
         <th >Nr. Tickets</th>
         <th >Address</th>
         <th >Transaction Date</th>
+        <th ></th>
       </tr>
     </thead>
     <tbody>
@@ -72,6 +73,26 @@
         <td>
           <%= booking.created_at.strftime '%Y-%m-%d %H:%M:%S' %>
         </td>
+
+        <td class="last links">
+          <ul class="inline">
+            <li title="Show" rel="tooltip" class="icon show_member_link ">
+              <a href="/super/booking/<%=booking.id%>">
+                <i class="icon-info-sign"></i>
+                <span style="display:none">Show</span>
+              </a>
+            </li>
+          
+            <li title="Delete" rel="tooltip" class="icon delete_member_link ">
+              <a href="/super/booking/<%=booking.id%>/delete">
+                <i class="icon-remove"></i>
+                <span style="display:none">Delete</span>
+              </a>
+            </li>
+          </ul>
+        </td>
+
+
       </tr>
       <% end %>
     </tbody>
