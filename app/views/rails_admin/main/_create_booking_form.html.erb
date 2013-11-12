@@ -1,0 +1,86 @@
+<form accept-charset="UTF-8" class="form-horizontal denser hide">
+  <div style="display:none">
+    <input name="utf8" type="hidden" value="✓">
+    <input id="booking_event_id" name="booking[event_id]" type="hidden" value="<%=event.id%>">
+  </div>
+  <span style="display:none" class="object-infos" data-model-label="Booking" data-object-label="Booking (new)">
+  </span>
+  <fieldset>
+    <legend style="display:none"><i class="icon-chevron-down"></i> Basic info</legend>
+    <div class="control-group belongs_to_association_type user_field " id="booking_user_id_field">
+      <label class="control-label" for="booking_user_id">User</label>
+      <div class="controls">
+        <select data-filteringselect="true" data-options="{&quot;xhr&quot;:true,&quot;remote_source&quot;:&quot;/super/user?associated_collection=user&amp;compact=true&amp;current_action=create&amp;source_abstract_model=booking&quot;}" id="booking_user_id" name="booking[user_id]" placeholder="Search" style="display: none;">
+          <option value="">
+          </option>
+        </select>
+
+        <a href="#" class="btn btn-info create" data-link="/super/user/new?modal=true" style="margin-left:10px"><i class="icon-plus icon-white"></i> Add a new User</a>
+        <span class="help-inline"></span>
+        <p class="help-block">Required. </p>
+      </div>
+    </div>
+    <div class="control-group ticket_count_field " id="booking_ticket_count_field">
+      <label class="control-label" for="booking_ticket_count">No. Tickets</label>
+      <div class="controls">
+        <input type="number" id="booking_ticket_count" name="booking[ticket_count]" value="1" min="1" max="<%=event.place - event.tickets.count%>" style="width:180px;"/>
+        <span class="help-inline"></span>
+        <p class="help-block">Required. </p>
+      </div>  
+    </div>
+    <div class="control-group button_field " id="booking_button_field">
+      <label class="control-label" for="booking_button"></label>
+        <div class="controls">
+          <button class="btn btn-primary" type="submit"><i class="icon-white icon-ok"></i>Save</button>
+          <button class="btn" onclick="$('#create_booking form').hide('slow');return false;" ><i class="icon-remove"></i>Cancel</button>
+        </div>  
+      </div>
+    </div>
+  </fieldset>
+</form>
+<script>
+  $("#booking_button_field .btn-primary").click(function(){
+    $.get('/super/create_booking.json',$('#create_booking form').serialize(),function(resp){
+      if(resp.success)
+      {
+        var tr = $('<tr>')
+        var td = $('<td>').append($('<a>').attr('href','/super/booking/'+resp.results.booking.id).html(resp.results.booking.ref))
+        tr.append(td)
+
+        td = $('<td>').append($('<a>').attr('href','/super/user/'+resp.user.id).html( resp.user.first_name + " " + resp.user.last_name))
+        tr.append(td)
+
+        td = $('<td>').append(resp.results.ticket_count)
+        tr.append(td)
+
+        td = $('<td>').append(resp.user.address)
+        tr.append(td)
+
+        td = $('<td>').append(resp.transaction_date)
+        tr.append(td)
+
+        $(".table").prepend(tr)
+
+        $('#create_booking form').hide('slow')
+      }
+      else
+      {
+        $('#create_booking .error').removeClass('error')
+        $('#create_booking .help-inline').each(function(i,o){$(o).html('')})
+        if(typeof(resp.errors.user_id) !== "undefined"){
+          var user_id = $('#create_booking #booking_user_id')
+          var parent = user_id.parents('.control-group')
+          parent.addClass('error')
+          parent.find('.help-inline').html(resp.errors.user_id)
+        }
+        if(typeof(resp.errors.ticket_count) !== "undefined"){
+          var ticket_count = $('#create_booking #booking_ticket_count')
+          var parent = ticket_count.parents('.control-group')
+          parent.addClass('error')
+          parent.find('.help-inline').html(resp.errors.ticket_count)
+        }
+      }
+    })
+    return false
+  });
+</script>

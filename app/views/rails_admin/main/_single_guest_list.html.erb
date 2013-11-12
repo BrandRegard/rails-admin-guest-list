@@ -30,7 +30,15 @@
     </table>
   </div>
 
-  <legend>Bookings</legend>
+  <% if event.tickets.count >= event.place %>
+    <legend>Bookings<span class="btn btn-info btn-small" style="margin-left:15px;" ></i> Sold Out</span></legend>
+  <% else %>
+    <legend>Bookings<span class="btn btn-success btn-small" style="margin-left:15px;" onclick="$('#create_booking form').toggle('slow')" ><i class="icon-plus icon-white"></i> Add New</span></legend>
+  <% end %>
+
+  <div id="create_booking" style="margin-bottom:10px;">
+    <%= render :partial => "create_booking_form",:locals=>{:event=>event} %>
+  </div>
 
   <table class="table table-condensed table-striped">
     <thead>
