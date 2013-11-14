@@ -7,7 +7,7 @@ require "rails_admin_guest_list/version"
 Gem::Specification.new do |s|
   s.name        = "rails_admin_guest_list"
   s.version     = RailsAdminGuestList::VERSION
-  s.authors     = ["Birgir Hrafn Sigurðsson"]
+  s.authors     = ["Birgir Hrafn Sigurdsson"]
   s.email       = ["birgir@transmit.is"]
   s.homepage    = "http://www.transmit.is"
   s.summary     = "RailsAdmin gem to display guestlists"
