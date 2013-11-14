@@ -25,16 +25,21 @@
       <tr>
         <td><strong>Tickets sold<strong></td>
         <td><strong>:</strong></td>
-        <td><%= bookings.map(&:tickets).flatten.count %></td>
+        <td class="total_sold_tickets"><%= bookings.map(&:tickets).flatten.count %></td>
       </tr>
     </table>
   </div>
 
-  <% if event.tickets.count >= event.place %>
-    <legend>Bookings<span class="btn btn-info btn-small" style="margin-left:15px;" ></i> Sold Out</span></legend>
-  <% else %>
-    <legend>Bookings<span class="btn btn-success btn-small" style="margin-left:15px;" onclick="$('#create_booking form').toggle('slow')" ><i class="icon-plus icon-white"></i> Add New</span></legend>
-  <% end %>
+  <legend class="booking-legend">
+    Bookings
+    <% if event.tickets.count >= event.place %>
+      <span class="btn btn-info btn-small" style="margin-left:15px;" ></i> Sold Out</span>
+      <span class="btn btn-success btn-small" style="margin-left:15px;display:none" onclick="$('#create_booking form').toggle('slow')" ><i class="icon-plus icon-white"></i> Add New</span>
+    <% else %>
+      <span class="btn btn-info btn-small" style="margin-left:15px;display:none" ></i> Sold Out</span>
+      <span class="btn btn-success btn-small" style="margin-left:15px" onclick="$('#create_booking form').toggle('slow')" ><i class="icon-plus icon-white"></i> Add New</span>
+    <% end %>
+  </legend>
 
   <div id="create_booking" style="margin-bottom:10px;">
     <%= render :partial => "create_booking_form",:locals=>{:event=>event} %>
@@ -53,7 +58,7 @@
     </thead>
     <tbody>
       <% bookings.each do |booking|%>
-      <tr class="odd link" data-link="/super/booking">
+      <tr id="booking_<%=booking.id%>" class="odd link" data-link="/super/booking">
         <td>
           <span class="show">
             <a href="/super/booking/<%=booking.id%>"><%=booking.ref%></a>
@@ -65,7 +70,13 @@
           </span>
         </td>
         <td>
-          <%= booking.tickets.count %>
+          <span class="changeTickets" data-booking-id="<%=booking.id%>">
+            <i class="icon-plus-sign" style="color:green"></i>
+            <span style="display:none">Increment Tickets</span>
+            <span class="ticket_count"><%= booking.tickets.count %></span>
+            <i class="icon-minus-sign" style="color:red" ></i>
+            <span style="display:none">Decrement Tickets</span>
+          </span>
         </td>
         <td>
           <%= booking.user.address %>
@@ -76,19 +87,22 @@
 
         <td class="last links">
           <ul class="inline">
+
             <li title="Show" rel="tooltip" class="icon show_member_link ">
               <a href="/super/booking/<%=booking.id%>">
                 <i class="icon-info-sign"></i>
                 <span style="display:none">Show</span>
               </a>
             </li>
-          
+
+
             <li title="Delete" rel="tooltip" class="icon delete_member_link ">
               <a href="/super/booking/<%=booking.id%>/delete">
                 <i class="icon-remove"></i>
                 <span style="display:none">Delete</span>
               </a>
             </li>
+
           </ul>
         </td>
 
@@ -98,3 +112,41 @@
     </tbody>
   </table>
 </section>
+
+ 
+<script>
+$('.changeTickets').on('click',function(e){
+  params = {}
+  params["booking"] = {}
+  params["booking"]["id"] = $(e.currentTarget).attr('data-booking-id')
+  params["booking"]["ticket_count"] = $(e.currentTarget).find('.ticket_count').text()
+
+  if($(e.target).attr('class').indexOf('minus') > 0)
+    params["booking"]["ticket_count"] = params["booking"]["ticket_count"]*1 - 1
+  else
+    params["booking"]["ticket_count"] = params["booking"]["ticket_count"]*1 + 1
+
+  $(".update-booking-error").remove()
+
+  $.get('/super/update_booking.json',params,function(resp){
+    if(resp.success){
+      $('.changeTickets[data-booking-id='+resp.booking_id+'] .ticket_count').html(resp.ticket_count)
+      $('.total_sold_tickets').html(resp.total_sold_tickets)
+      if(resp.sold_out)
+      {
+        $('.booking-legend .btn-info').show()
+        $('.booking-legend .btn-success').hide()
+      }
+      else
+      {
+        $('.booking-legend .btn-info').hide()
+        $('.booking-legend .btn-success').show()
+      }
+    }
+    else{
+      var message = '<div class="alert alert-danger update-booking-error"><a class="close" data-dismiss="alert" href="#">×</a>'+ resp.errors + '</div>'
+      $(message).insertBefore('#create_booking')
+    }
+  });
+})
+</script>
