@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    <% Event.where([" starttime > ? ", -6.months.since(Time.now)]).each do |event|%>
+    <% Event.where([" starttime > ? ", -6.months.since(Time.now)]).reverse_each do |event|%>
     <% booked_tickets = event.bookings.where(["ref IS NOT ?",nil]).map(&:tickets).flatten.count %>
     <tr class="odd link" data-link="/super/booking">
       <td>
