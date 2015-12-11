@@ -23,7 +23,7 @@
     <div class="control-group ticket_count_field " id="booking_ticket_count_field">
       <label class="control-label" for="booking_ticket_count">No. Tickets</label>
       <div class="controls">
-        <input type="number" id="booking_ticket_count" name="booking[ticket_count]" value="1" min="1" max="<%=event.place - event.tickets.count%>" style="width:180px;"/>
+        <input type="number" id="booking_ticket_count" name="booking[ticket_count]" value="1" min="1" max="<%=event.place.to_i - event.bookings.sum(&:count).to_i%>" style="width:180px;"/>
         <span class="help-inline"></span>
         <p class="help-block">Required. </p>
       </div>  

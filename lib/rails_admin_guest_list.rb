@@ -41,7 +41,7 @@ module RailsAdmin
                   ticket_count = params[:booking][:ticket_count].to_i
                   booking = Booking.find(id)
                   new_ticket_count = booking.alter_ticket_count(ticket_count)
-                  total_sold = booking.event.bookings.map(&:tickets).flatten.count 
+                  total_sold = booking.event.bookings.sum(&:count)
                   sold_out = (total_sold == booking.event.place) 
                   render :json => {:success => true  , :booking_id=> id, :total_sold_tickets=>total_sold ,:sold_out=>sold_out, :ticket_count => new_ticket_count}
                 rescue Exception => e
