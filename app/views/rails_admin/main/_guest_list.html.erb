@@ -11,7 +11,7 @@
   </thead>
   <tbody>
     <% Event.where([" starttime > ? ", -6.months.since(Time.now)]).reverse_each do |event|%>
-    <% booked_tickets = event.bookings.where(["ref IS NOT ?",nil]).map(&:tickets).flatten.count %>
+    <% booked_tickets = event.bookings.where(["ref IS NOT ?",nil]).sum(&:count) %>
     <tr class="odd link" data-link="/super/booking">
       <td>
         <span class="show">

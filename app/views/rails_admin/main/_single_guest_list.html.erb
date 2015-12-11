@@ -18,21 +18,21 @@
         <td><%= event.starttime.strftime '%Y-%m-%d %H:%M:%S' %></td>
       </tr>
       <tr>
-        <td><strong>Tickets Total<strong></td>
+        <td><strong>Tickets Total</strong></td>
         <td><strong>:</strong></td>
         <td><%= event.place %></td>
       </tr>
       <tr>
-        <td><strong>Tickets sold<strong></td>
+        <td><strong>Tickets sold</strong></td>
         <td><strong>:</strong></td>
-        <td class="total_sold_tickets"><%= bookings.map(&:tickets).flatten.count %></td>
+        <td class="total_sold_tickets"><%= bookings.sum(&:count) %></td>
       </tr>
     </table>
   </div>
 
   <legend class="booking-legend">
     Bookings
-    <% if event.tickets.count >= event.place %>
+    <% if event.bookings.sum(&:count) >= event.place %>
       <span class="btn btn-info btn-small" style="margin-left:15px;" ></i> Sold Out</span>
       <span class="btn btn-success btn-small" style="margin-left:15px;display:none" onclick="$('#create_booking form').toggle('slow')" ><i class="icon-plus icon-white"></i> Add New</span>
     <% else %>
@@ -48,12 +48,12 @@
   <table class="table table-condensed table-striped">
     <thead>
       <tr>
-        <th >Reference</th>
-        <th >Name</th>
-        <th >Nr. Tickets</th>
-        <th >Address</th>
-        <th >Transaction Date</th>
-        <th ></th>
+        <th>Reference</th>
+        <th>Name</th>
+        <th>Nr. Tickets</th>
+        <th>Address</th>
+        <th>Transaction Date</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -77,7 +77,7 @@
           <span class="changeTickets" data-booking-id="<%=booking.id%>">
             <i class="icon-plus-sign" style="color:green"></i>
             <span style="display:none">Increment Tickets</span>
-            <span class="ticket_count"><%= booking.tickets.count %></span>
+            <span class="ticket_count"><%= booking.count %></span>
             <i class="icon-minus-sign" style="color:red" ></i>
             <span style="display:none">Decrement Tickets</span>
           </span>

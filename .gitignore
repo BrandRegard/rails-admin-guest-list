@@ -1,3 +1,4 @@
 .bundle/
+.idea/
 log/*.log
 pkg/
